@@ -1,0 +1,4 @@
+Error[1027] C:\Users\kheng\Desktop\TEST\miniproject new.c 1 : unable to locate 'fileheader.h'
+Error[1027] C:\Users\kheng\Desktop\TEST\miniproject new.c 2 : unable to locate 'delay18.h'
+Error[1027] C:\Users\kheng\Desktop\TEST\miniproject new.c 3 : unable to locate 'define.h'
+Error[1027] C:\Users\kheng\Desktop\TEST\miniproject new.c 4 : unable to locate 'lcd8bit.h'

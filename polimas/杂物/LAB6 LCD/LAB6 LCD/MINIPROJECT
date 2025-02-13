@@ -1,0 +1,105 @@
+// Define sensor pins
+#define SENSOR1 2  // Sensor 1 connected to D2
+#define SENSOR2 4  // Sensor 2 connected to D4 (changed from D3)
+#define SENSOR3 7  // Sensor 3 connected to D7
+
+// Define motor driver control pins (L298)
+#define MOTOR_LEFT_FORWARD 5    // IN1 - Left motor forward
+#define MOTOR_LEFT_BACKWARD 6   // IN2 - Left motor backward
+#define MOTOR_RIGHT_FORWARD 9   // IN3 - Right motor forward
+#define MOTOR_RIGHT_BACKWARD 10 // IN4 - Right motor backward
+
+// Define motor enable pins for speed control (PWM pins)
+#define ENA 3  // Enable pin for left motor (PWM pin)
+#define ENB 11 // Enable pin for right motor (PWM pin)
+
+// Function declarations
+void move_forward();
+void move_left();
+void move_right();
+void move_reverse();
+void halt();
+
+void setup() {
+    // Configure sensor pins as inputs
+    pinMode(SENSOR1, INPUT);
+    pinMode(SENSOR2, INPUT);
+    pinMode(SENSOR3, INPUT);
+
+    // Configure motor control pins as outputs
+    pinMode(MOTOR_LEFT_FORWARD, OUTPUT);
+    pinMode(MOTOR_LEFT_BACKWARD, OUTPUT);
+    pinMode(MOTOR_RIGHT_FORWARD, OUTPUT);
+    pinMode(MOTOR_RIGHT_BACKWARD, OUTPUT);
+
+    // Configure motor enable pins as outputs
+    pinMode(ENA, OUTPUT);
+    pinMode(ENB, OUTPUT);
+
+    // Enable the motors at full speed (you can use analogWrite to adjust speed)
+    digitalWrite(ENA, HIGH); // Full speed for left motor
+    digitalWrite(ENB, HIGH); // Full speed for right motor
+
+    // Initialize motors to be stopped
+    halt();
+}
+
+void loop() {
+    // Read sensor values
+    int sensor1 = digitalRead(SENSOR1);
+    int sensor2 = digitalRead(SENSOR2);
+    int sensor3 = digitalRead(SENSOR3);
+
+    // Movement logic based on sensor readings
+    if (sensor1 == HIGH && sensor2 == LOW && sensor3 == HIGH) {
+        move_forward();  // Move forward
+    } else if (sensor1 == HIGH && sensor2 == HIGH && sensor3 == LOW) {
+        move_left();  // Turn left
+    } else if (sensor1 == LOW && sensor2 == HIGH && sensor3 == HIGH) {
+        move_right();  // Turn right
+    } else if (sensor1 == HIGH && sensor2 == HIGH && sensor3 == HIGH) {
+        move_reverse();  // Move reverse
+    } else if (sensor1 == LOW && sensor2 == LOW && sensor3 == LOW) {
+        halt();  // Stop moving
+    }
+}
+
+// Function to move forward
+void move_forward() {
+    digitalWrite(MOTOR_LEFT_FORWARD, HIGH);
+    digitalWrite(MOTOR_LEFT_BACKWARD, LOW);
+    digitalWrite(MOTOR_RIGHT_FORWARD, HIGH);
+    digitalWrite(MOTOR_RIGHT_BACKWARD, LOW);
+}
+
+// Function to move left
+void move_left() {
+    digitalWrite(MOTOR_LEFT_FORWARD, LOW);
+    digitalWrite(MOTOR_LEFT_BACKWARD, LOW);
+    digitalWrite(MOTOR_RIGHT_FORWARD, HIGH);
+    digitalWrite(MOTOR_RIGHT_BACKWARD, LOW);
+}
+
+// Function to move right
+void move_right() {
+    digitalWrite(MOTOR_LEFT_FORWARD, HIGH);
+    digitalWrite(MOTOR_LEFT_BACKWARD, LOW);
+    digitalWrite(MOTOR_RIGHT_FORWARD, LOW);
+    digitalWrite(MOTOR_RIGHT_BACKWARD, LOW);
+}
+
+// Function to move reverse
+void move_reverse() {
+    digitalWrite(MOTOR_LEFT_FORWARD, LOW);
+    digitalWrite(MOTOR_LEFT_BACKWARD, HIGH);
+    digitalWrite(MOTOR_RIGHT_FORWARD, LOW);
+    digitalWrite(MOTOR_RIGHT_BACKWARD, HIGH);
+}
+
+// Function to stop movement
+void halt() {
+    digitalWrite(MOTOR_LEFT_FORWARD, LOW);
+    digitalWrite(MOTOR_LEFT_BACKWARD, LOW);
+    digitalWrite(MOTOR_RIGHT_FORWARD, LOW);
+    digitalWrite(MOTOR_RIGHT_BACKWARD, LOW);
+}
